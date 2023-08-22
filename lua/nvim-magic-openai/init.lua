@@ -5,9 +5,9 @@ local cache = require('nvim-magic-openai._cache')
 local log = require('nvim-magic-openai._log')
 local http = require('nvim-magic-openai._http')
 
-local DEFAULT_API_ENDPOINT = 'https://api.openai.com/v1/chat/completions'
-local DEFAULT_MODEL = 'gpt-3.5-turbo'
-local API_KEY_ENVVAR = 'OPENAI_API_KEY'
+local DEFAULT_API_ENDPOINT = 'AZURE_OPENAI_URL' 
+local DEFAULT_MODEL = 'gpt-4'
+local API_KEY_ENVVAR = 'AZURE_OPENAI_API_KEY'
 
 local function env_get_api_key()
 	local api_key = vim.env[API_KEY_ENVVAR]
@@ -17,7 +17,7 @@ end
 
 local function default_config()
 	return {
-		api_endpoint = DEFAULT_API_ENDPOINT,
+		api_endpoint = vim.env[DEFAULT_API_ENDPOINT],
 		cache = {
 			dir_name = 'http',
 		},
