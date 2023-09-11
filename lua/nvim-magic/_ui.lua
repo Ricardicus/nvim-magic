@@ -26,7 +26,7 @@ function ui.pop_up(lines, filetype, border_text, keymaps)
 		buf_options = {
 			modifiable = true,
 			readonly = false,
-			filetype = filetype,
+			--filetype = filetype,
 			buftype = 'nofile',
 		},
 		win_options = {
@@ -50,11 +50,11 @@ function ui.prompt_input(title, keymaps, on_submit)
 		position = '20%',
 		size = {
 			width = '60%',
-			height = '20%',
+			height = '60%',
 		},
 		relative = 'editor',
 		border = {
-			highlight = 'MyHighlightGroup',
+			-- highlight = 'MyHighlightGroup',
 			style = 'single',
 			text = {
 				top = title,
@@ -62,7 +62,7 @@ function ui.prompt_input(title, keymaps, on_submit)
 			},
 		},
 		win_options = {
-			winblend = 10,
+			winblend = 0,
 			winhighlight = 'Normal:Normal',
 		},
 	}, {
