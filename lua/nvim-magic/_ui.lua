@@ -45,7 +45,7 @@ function ui.pop_up(lines, filetype, border_text, keymaps)
 	vim.api.nvim_buf_set_lines(popup.bufnr, 0, 1, false, lines)
 end
 
-function ui.prompt_input(title, keymaps, on_submit)
+function ui.prompt_input(title, keymaps, backend, on_submit)
 	local input = Input({
 		position = '20%',
 		size = {
@@ -76,7 +76,41 @@ function ui.prompt_input(title, keymaps, on_submit)
 		input:unmount()
 	end)
 
-	for _, v in ipairs(keymaps) do
+  -- Function to update buffer content
+  local function update_buffer_content(content)
+    local bufnr = input.bufnr 
+    vim.api.nvim_buf_set_lines(bufnr, 0, 1, false, {content})
+  end
+
+  -- Additional keymaps for Up and Down arrow keys
+  local additional_keymaps = {
+    -- Up arrow key
+    {'n', '<Up>', function()
+      -- Logic for when Up arrow is pressed
+      local suggestion = backend:get_suggestions_arrow_up()
+      if suggestion then
+        suggestion = "> " .. suggestion
+        update_buffer_content(suggestion)
+      end
+    end},
+
+    -- Down arrow key
+    {'n', '<Down>', function()
+      -- Logic for when Down arrow is pressed
+      local suggestion = backend:get_suggestions_arrow_down()
+      if suggestion then
+        suggestion = "> " .. suggestion
+        update_buffer_content(suggestion)
+      end
+    end},
+  }
+
+  -- Adding your original keymaps
+  for _, v in ipairs(keymaps) do
+    input:map(unpack(v))
+  end
+
+	for _, v in ipairs(additional_keymaps) do
 		input:map(unpack(v))
 	end
 end

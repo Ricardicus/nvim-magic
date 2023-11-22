@@ -75,7 +75,9 @@ function flows.suggest_alteration(backend, language)
       return
    end
 
-   ui.prompt_input('This code should be altered to...', keymaps.get_quick_quit(), function(task)
+   ui.prompt_input('This code should be altered to...', keymaps.get_quick_quit(), backend, function(task)
+      backend:add_to_suggestions_history(task)
+
       local visual = table.concat(visual_lines, '\n')
       local tmpl = templates.loaded.alter
       local prompt = tmpl:fill({
@@ -235,7 +237,7 @@ function flows.suggest_chat(backend)
 
    local visual_lines, start_row, start_col, end_row, _ = buffer.get_visual_lines()
 
-   ui.prompt_input('What is your question? ...', keymaps.get_quick_quit(), function(task)
+   ui.prompt_input('What is your question? ...', keymaps.get_quick_quit(), backend, function(task)
       local prompt
 
       if visual_lines == nil then
@@ -280,7 +282,7 @@ function flows.content_chat_qa(backend)
 
    local visual_lines, start_row, start_col, end_row, _ = buffer.get_visual_lines()
 
-   ui.prompt_input('What do you want to know about this document? ...', keymaps.get_quick_quit(), function(task)
+   ui.prompt_input('What do you want to know about this document? ...', keymaps.get_quick_quit(), backend, function(task)
       local prompt = task
 
       buffer.append_end(backend:get_chat_buffer(), ">> " .. task)
@@ -344,7 +346,7 @@ function answer_question(backend, questions, index, QnA, success)
       success()
    else
       local question = questions[index]
-      ui.prompt_input(question, keymaps.get_quick_quit(), function(answer)
+      ui.prompt_input(question, keymaps.get_quick_quit(), backend, function(answer)
          QnA[question] = answer
          if index == 1 then
             buffer.reset_last(backend:get_chat_buffer(), question)
@@ -373,7 +375,7 @@ function flows.gen_codebase(backend)
 
    local visual_lines, start_row, start_col, end_row, _ = buffer.get_visual_lines()
 
-   ui.prompt_input('What do you want to have built? ...', keymaps.get_quick_quit(), function(task)
+   ui.prompt_input('What do you want to have built? ...', keymaps.get_quick_quit(), backend, function(task)
       local prompt = task
       buffer.append_end(backend:get_chat_buffer(), "What do you want to have built?")
       buffer.append_end(backend:get_chat_buffer(), ">> " .. prompt)

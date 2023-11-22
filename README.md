@@ -8,17 +8,17 @@ Things this fork has added:
 
 - Chat
 - Support for chat based models (gpt-3.5-turbo, gpt-4)
-- Document Q/A (using indexer for handling out-of-context sized content)
+- Document Q&A (using indexer for handling out-of-context sized content)
 - Codebase generation
 
 ## Environment variables
 
-This uses the OPEN_API_KEY from the enviroment. It is supposed to be set to your OpenAI key.
+This uses the value of $OPENAI_API_KEY from the current enviroment. It should be set to your OpenAI API key.
 
 ## Default model
 
 The default model used is gpt-3.5-turbo.
-Change that in this file, if you want:
+Edit this file if you want to use something else:
 
 [lua/nvim-magic-openai/init.lua](https://github.com/Ricardicus/nvim-magic/blob/master/lua/nvim-magic-openai/init.lua)
 
@@ -28,13 +28,13 @@ Change that in this file, if you want:
 - Docstring
 - Alteration
 - Chat
-- Document Q/A
+- Document Q&A
 - Codebase generations
 
 When using chat, the window you focus on when you start the chat will be
-selected for the rest of the session. Until nvim is closed or until you
+selected for the rest of the session. Until Neovim is closed or until you
 manually reset the chat (<Leader>mcc). If text is selected in the visual,
-this information is passed along the question but hidden from the convo-window.
+this information is passed along with the query but hidden from the chat window.
 See the demo gif below.
 
 ### Chat (`<Leader>mcc`)
@@ -46,18 +46,17 @@ See the demo gif below.
 
 ### Generate codebase (`<Leader>mcb`)
 
-You want to look at the code, check out that it is alright.
-But it gives you a rough start to something.
+You'll want to double check the code, but this should be enough to get you started on your project.
 
 <img 
 	alt='Example of some generated codebase'
 	src='docs/gifs/codebase.gif'
 	/>
 
-### Document Q/A (`<Leader>mcq`)
+### Document Q&A (`<Leader>mcq`)
 
-Aks questions about documents, don't worry about their size. You need to set up a window for chat before hand.
-The cursor needs to be in the document that you want to query about.
+Ask questions about documents of any size. You need to set up a chat window beforehand.
+The cursor needs to be in the document that you want to ask questions about.
 
 <img 
 	alt='Example of some document Q/A'
@@ -109,9 +108,9 @@ use({
 })
 ```
 
-See [docs/config.md](docs/config.md) if you want to override the default configuration e.g. to turn off the default keymaps, or use a different OpenAI engine than the default one (`davinci-codex`). Your OpenAI account might not have access to `davinci-codex` if it is not in the OpenAI Codex private beta (as of 2022-02-02).
+See [docs/config.md](docs/config.md) if you want to override the default configuration e.g. to turn off the default keymaps, or use a different OpenAI model (defaults to `gpt-3.5-turbo`).
 
-Your API key should be made available to your Neovim session in an environment variable `OPENAI_API_KEY`. See [docs/openai.md](docs/openai.md) for more details. Note that API calls may be charged for by OpenAI depending on the engine used.
+Your API key should be made available to your Neovim session in an environment variable `OPENAI_API_KEY`. See [docs/openai.md](docs/openai.md) for more details. Note that API calls may be charged for by OpenAI depending on the model used.
 
 ```shell
  export OPENAI_API_KEY='your-api-key-here'
@@ -128,10 +127,10 @@ You can map your own key sequences to the predefined `<Plug>`s if you don't want
 | `<Plug>nvim-magic-append-completion`   | `<Leader>mcs`  | visual | Fetch and append completion                  |
 | `<Plug>nvim-magic-suggest-alteration`  | `<Leader>mss`  | visual | Ask for an alteration to the selected text   |
 | `<Plug>nvim-magic-suggest-docstring`   | `<Leader>mds`  | visual | Generate a docstring                         |
-| `<Plug>nvim-magic-suggest-chat`        | `<Leader>mcc`  | visual | Chat, ask questions. Keep the window.        |
-| `<Plug>nvim-magic-suggest-chat-reset`  | `<Leader>mcr`  | visual | Chat, reset history. You can start all over. |
-| `<Plug>nvim-magic-doc-qa-chat`         | `<Leader>mcq`  | visual | Ask questions about a document. Needs chat started and cursor in the document. |
-| `<Plug>nvim-magic-gen-codebase`        | `<Leader>mcb`  | visual | Generate a codebase. Depending on input, quality may vary |
+| `<Plug>nvim-magic-suggest-chat`        | `<Leader>mcc`  | visual | Chat, ask questions, keep the context        |
+| `<Plug>nvim-magic-suggest-chat-reset`  | `<Leader>mcr`  | visual | Chat, reset history, start over              |
+| `<Plug>nvim-magic-doc-qa-chat`         | `<Leader>mcq`  | visual | Ask questions about a document (requires active chat window and cursor placed in the document of interest) |
+| `<Plug>nvim-magic-gen-codebase`        | `<Leader>mcb`  | visual | Generate initial codebase (quality may vary) |
 
 ## Development
 

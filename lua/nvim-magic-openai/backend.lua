@@ -325,6 +325,56 @@ function BackendMethods:indexer_reset()
    self.chat_index_pos = 0
 end
 
+function BackendMethods:add_to_suggestions_history(suggestion)
+    local already_exists = false
+
+    -- Check if the suggestion already exists in the history
+    for _, existing_suggestion in ipairs(self.suggestions_history) do
+        if existing_suggestion == suggestion then
+            already_exists = true
+            break
+        end
+    end
+
+    -- Insert the suggestion only if it doesn't exist
+    if not already_exists then
+        table.insert(self.suggestions_history, 1, suggestion)
+        self.suggestions_index = nil 
+    end
+end
+
+function BackendMethods:get_suggestion_by_index(index)
+    if index >= 1 and index <= #self.suggestions_history then
+        return self.suggestions_history[index]
+    else
+        return nil -- or some error handling
+    end
+end
+
+function BackendMethods:get_suggestions_history_length()
+    return #self.suggestions_history
+end
+
+function BackendMethods:get_suggestions_arrow_down()
+    if #self.suggestions_history == 0 then return nil end
+    if self.suggestions_index == nil or self.suggestions_index <= 1 then
+        self.suggestions_index = #self.suggestions_history
+    else
+        self.suggestions_index = self.suggestions_index - 1
+    end
+    return self.suggestions_history[self.suggestions_index]
+end
+
+function BackendMethods:get_suggestions_arrow_up()
+    if #self.suggestions_history == 0 then return nil end
+    if self.suggestions_index == nil or self.suggestions_index >= #self.suggestions_history then
+        self.suggestions_index = 1
+    else
+        self.suggestions_index = self.suggestions_index + 1
+    end
+    return self.suggestions_history[self.suggestions_index]
+end
+
 local BackendMt = { __index = BackendMethods }
 
 function backend.new(api_endpoint, model, http, api_key_fn)
@@ -337,7 +387,9 @@ function backend.new(api_endpoint, model, http, api_key_fn)
       chat_index = {},
       chat_index_pos = 0,
       chat_index_max = 16,
-      chat_buffer = 0
+      chat_buffer = 0,
+      suggestions_history = {},
+      suggestions_index = nil,
    }, BackendMt)
 end
 
