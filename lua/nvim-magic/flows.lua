@@ -240,6 +240,8 @@ function flows.suggest_chat(backend)
    ui.prompt_input('What is your question? ...', keymaps.get_quick_quit(), backend, function(task)
       local prompt
 
+      backend:add_to_suggestions_history(task)
+
       if visual_lines == nil then
          prompt = task
       else
@@ -263,7 +265,7 @@ end
 
 function flows.suggest_chat_reset(backend)
    backend:chat_reset()
-   print("Chat has been reset")
+   ui.notify('Chat history has been reset', 'info')
 end
 
 function flows.content_chat_qa(backend)
